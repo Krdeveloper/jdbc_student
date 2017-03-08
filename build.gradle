@@ -2,7 +2,12 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'application'
 
+sourceCompatibility = 1.8 //컴파일 할때 적용할 jdk버전을 지정
 
+
+tasks.withType(JavaCompile){
+	options.encoding = 'UTF-8'
+}
 
 
 
@@ -17,3 +22,29 @@ dependencies {
 	//Use JUnit test framework
 	testImplementation 'junit:junit:4.12'
 	}
+	
+
+
+version = 1.0
+mainClassName = 'kr.or.dgit_gradle_project.StudentUI'
+jar {
+	baseName = 'GradleTest'
+	appendix = 'bin'
+	manifest{
+		attributes 'Title':baseName, 'Version' : version, 'Main-Class':mainClassName
+	}
+	//archiveName 'StudentManagement.jar' //baseName, appendix 속성이 무시
+	dependsOn configurations.runtime//실행가능한 jar파일 생성	
+}
+
+task myJavadocs(type:Javadoc){
+	source = sourceSets.main.allJava
+}
+
+uploadArchives{
+	repositories {
+		flatDir{
+			dir 'repos'
+		}
+	}
+}
